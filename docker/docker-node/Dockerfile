@@ -1,0 +1,13 @@
+FROM ubuntu
+
+RUN apt update
+RUN apt upgrade -y
+RUN apt install nodejs -y
+
+COPY package.json package.json
+COPY package-lock.json package-lock.json
+COPY index.js index.js
+
+RUN npm install
+
+ENTRYPOINT [ "node","index.js" ]
