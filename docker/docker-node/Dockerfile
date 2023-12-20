@@ -1,8 +1,4 @@
-FROM ubuntu
-
-RUN apt update
-RUN apt upgrade -y
-RUN apt install nodejs -y
+FROM node
 
 COPY package.json package.json
 COPY package-lock.json package-lock.json

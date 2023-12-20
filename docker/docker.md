@@ -82,11 +82,36 @@ docker run -it -e key=value -e key1=value1 ubuntu
 
 ## Dockerfile
 
-See example
+For creating docker images
 
 ### Tagging
 
 ```
 docker build -t <tag you want to add> <path of Dockerfile>
 docker build -t docker-node-asd .
+```
+
+### Running my built image
+
+```
+docker run -it -e PORT=4000 -p 4000:4000 docker-node-asd
+```
+
+## Docker Compose
+
+For Running multiple containers
+
+### Run compose to create and start containers
+
+```
+docker compose up
+docker compose up -d
+```
+
+`-d` for running in detach mode (run in background)
+
+### Remove containers
+
+```
+docker compose down
 ```
