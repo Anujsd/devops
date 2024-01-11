@@ -124,60 +124,6 @@ docker run -it -e key=value -e key1=value1 ubuntu
 
 `-e` flag for environment variables
 
-## Dockerfile
-
-For creating docker images
-
-### Tagging
-
-```
-docker build -t <tag you want to add> <path of Dockerfile>
-docker build -t docker-node-asd .
-```
-
-`-t` you can give name:tag combination also
-
-### Running my built image
-
-```
-docker run -it -e PORT=4000 -p 4000:4000 docker-node-asd
-```
-
-### Making efficient images
-
-- make as less layers as possible (less number of lines)
-
-- make them logically sound.
-
-  because if you change any line on layer 3 all layer below will be formed again and you will loose caching benefit.
-
-### RUN vs CMD vs ENTRYPOINT
-
-`RUN` : Image building step. you can have as many RUN as needed.
-
-`CMD` : Container executes it by deafult when you launch the built image. Dockerfile will only use the final CMD defined.
-
-`ENTRYPOINT` : Same work as `CMD`. learn more [here](https://docs.docker.com/engine/reference/builder/#understand-how-cmd-and-entrypoint-interact)
-
-## Docker Compose
-
-For Running multiple containers
-
-### Run compose to create and start containers
-
-```
-docker compose up
-docker compose up -d
-```
-
-`-d` for running in detach mode (run in background)
-
-### Remove containers
-
-```
-docker compose down
-```
-
 ## Docker Networking
 
 `bridge`: connect to host machine for internet only. differnet network stack than host.
@@ -271,8 +217,130 @@ docker run -it -p 4000:8081 -v %cd%:/app/ node-asd
 
 ## Docker Multi Stage Builds
 
-Need to write here
+You can keep build stage and run stage differnet
 
----
+## Dockerfile
+
+For creating docker images
+
+### Example Docker File
+
+[Dockerizing MERN Bookstore App](https://github.com/Anujsd/MERN-Todo-App/blob/main/frontend/Dockerfile)
+
+```
+FROM node
+
+WORKDIR /app
+
+COPY package.json .
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 5173
+
+ENTRYPOINT [ "npm","run","dev"]
+```
+
+### Tagging
+
+```
+docker build -t <tag you want to add> <path of Dockerfile>
+docker build -t docker-node-asd .
+```
+
+`-t` you can give name:tag combination also
+
+### Running my built image
+
+```
+docker run -it -e PORT=4000 -p 4000:4000 docker-node-asd
+```
+
+### Making efficient images
+
+- make as less layers as possible (less number of lines)
+
+- make them logically sound.
+
+  because if you change any line on layer 3 all layer below will be formed again and you will loose caching benefit.
+
+### RUN vs CMD vs ENTRYPOINT
+
+`RUN` : Image building step. you can have as many RUN as needed.
+
+`CMD` : Container executes it by deafult when you launch the built image. Dockerfile will only use the final CMD defined.
+
+`ENTRYPOINT` : Same work as `CMD`. learn more [here](https://docs.docker.com/engine/reference/builder/#understand-how-cmd-and-entrypoint-interact)
+
+## Docker Compose
+
+For Running multiple containers
+
+### Example of compose file
+
+[Dockerizing MERN Bookstore App](https://github.com/Anujsd/MERN-Todo-App)
+
+```
+version: '3.8'
+services:
+  mongodb:
+    image: 'mongo'
+    ports:
+      - '27017:27017'
+    volumes:
+      - data:/data/db
+    env_file:
+      - ./.env/mongo.env
+
+  backend:
+    build: ./backend
+    ports:
+      - '4040:4040'
+    env_file:
+      - ./.env/backend.env
+    depends_on:
+      - mongodb
+
+  frontend:
+    build: ./frontend
+    ports:
+      - '8000:8000'
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+
+volumes:
+  data:
+```
+
+### Run compose to create and start containers
+
+```
+docker compose up
+docker compose up -d
+```
+
+`-d` for running in detach mode (run in background)
+
+if images are already build it will not build them so use `--build` tag to build latest images
+
+```
+docker compose up --build
+```
+
+you can run specific service also
+
+```
+docker compose run <service name>
+```
+
+### Remove containers
+
+```
+docker compose down
+```
 
 ## Concepts
