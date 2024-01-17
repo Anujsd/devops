@@ -76,3 +76,37 @@ terraform destroy -auto-approve
 
 terraform detroy --target = aws_instance.ec2
 ```
+
+### Recreate Resource
+
+```
+terraform apply -replace="aws_instance.myec2"
+```
+
+### format terraform
+
+```
+terraform fmt
+```
+
+### validate terraform
+
+```
+terraform validate
+```
+
+### adding tags
+
+You can set TF_LOG to one of the log levels (in order of decreasing verbosity)
+
+TRACE, DEBUG, INFO, WARN or ERROR to change the verbosity of the logs.
+
+```
+setx TF_LOG TRACE
+setx TF_LOG DEBUG
+
+setx TF_LOG_PATH C:\temp\crash.log
+
+
+setx TF_VAR_instancetype t2.large
+```
