@@ -95,7 +95,18 @@ terraform fmt
 terraform validate
 ```
 
-### adding tags
+### Terraform workspace
+
+```
+terraform workspace -h
+terraform workspace show
+terraform workspace new dev
+terraform workspace new prd
+terraform workspace list
+terraform workspace select dev
+```
+
+### Adding tags
 
 You can set TF_LOG to one of the log levels (in order of decreasing verbosity)
 
@@ -109,4 +120,28 @@ setx TF_LOG_PATH C:\temp\crash.log
 
 
 setx TF_VAR_instancetype t2.large
+```
+
+### State Management
+
+```
+terraform state list
+
+terraform state mv aws_instance.ec2 aws_instance.webapp
+
+terraform state pull
+
+terraform state show aws_instance.ec2
+
+terraform state rm aws_instance.ec2
+
+```
+
+### Import manually created resources under terraform
+
+```
+terraform plan -generate-config-out=mysg.tf
+
+terraform apply -auto-approve
+
 ```
